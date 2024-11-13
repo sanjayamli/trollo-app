@@ -1,0 +1,24 @@
+/* frontend/src/App.css */
+.task-board {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+}
+
+.column {
+  flex: 1;
+  background-color: #f4f4f4;
+  padding: 16px;
+  border-radius: 4px;
+}
+
+.task {
+  background-color: #fff;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.cards-color{
+  background-color: #d2eaff !important;
+}
