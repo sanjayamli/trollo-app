@@ -29,6 +29,8 @@ async function main() {
   }
 }
 
+main()
+
 app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
 

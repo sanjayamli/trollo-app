@@ -11,6 +11,7 @@ export const register = async (req, res) => {
   const { name, email, password } = req.body;
   try {
     const user = new User({ name, email, password });
+    console.log(user.save())
     await user.save();
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
@@ -37,22 +38,37 @@ export const login = async (req, res) => {
 
 export const googleLogin = async (req, res) => {
   const { tokenId } = req.body;
-  console.log(req.body);
+  console.log ("tokenId:", tokenId)
+  console.log("req.body",req.body);
   try {
     const ticket = await client.verifyIdToken({
       idToken: tokenId,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
-    console.log(ticket, "ticket");
+    // console.log( "ticket 1 ",ticket);
+    // console.log(" ticket.getPayload():", ticket.getPayload())
     const { name, email } = ticket.getPayload();
-    let user = await User.findOne({ email }); 
-    if (!user) {
-      user = await User.create({ name, email, googleId: ticket.sub });
+    console.log("name:",name)
+    console.log("email:",email);
+    
+    console.log("we are here")
+    try {
+      const user = await User.findOne({ email });
+    
+      console.log("user:", user);
+    } catch (err) {
+      console.error("Error with User.findOne:", err);
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "12h",
-    });
-    res.json({ token });
+    try {
+      const token = jwt.sign({ id: User._id }, process.env.JWT_SECRET, {
+        expiresIn: "12h",
+      });
+      console.log("token:", token);
+      res.json({ token: token });
+    } catch (tokenError) {
+      console.error("Error generating token:", tokenError);
+      res.status(500).json({ error: "Token generation failed" });
+    }
   } catch (error) {
     res.status(400).json({ error: "Google login failed" });
   }
